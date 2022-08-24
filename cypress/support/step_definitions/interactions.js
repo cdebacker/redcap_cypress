@@ -68,7 +68,7 @@ Given("I visit Project ID {int}", (id) => {
     cy.visit_version({page: 'index.php', params: 'pid=' + id})
 })
 
-Given(/^I should be able to locate and visit the Control Center link labeled "(.*)"(?: and see the title "(.*)")?$/, (link_label, title) => {
+Given(/^I should be able to locate and visit the Control Center link labeled "(.*?)"(?: and see the title "(.*)")?$/, (link_label, title) => {
     if(title !== undefined){
         cy.contains_cc_link(link_label, title)
     } else {
