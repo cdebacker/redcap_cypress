@@ -11,9 +11,18 @@ defineParameterType({
 
 // Compare against the commented-out, less abstract step definitions at the end of the file. I think this is preferable.
 Given('I click on the {ordinal}{clickable} near the text {string}', (n, type, text) => {
+    //Need to escape double quotes before inserting text into selector
+    text = text.replaceAll('\"', '\\\"')
     let subsels = {link: 'a', button: 'button', checkbox: 'input[type=checkbox]', radio: 'input[type=radio]'}
     let subsel = subsels[type] + `:visible:nth(${n})` //'a:visible:nth(0)', 'button:visible:nth(2)', etc.
-    let sel = `:contains(${text}):has(${subsel}):not(:has(:contains(${text}):has(${subsel})))`
+
+    //Match visible elements directly containing the text, call this "text container"
+    let text_container = `:contains(${text}):not(:has(:contains(${text}))):visible`
+    //Match elements containing both the text container, and at least `n` visible elements of type `type`
+    let sel = `:has(${text_container}):has(${subsel})`
+    //Filter out ancestors
+    sel = `${sel}:not(:has(${sel}))`
+
     cy.get_top_layer(($el) => {expect($el.find(sel)).length.to.be.above(0)})
         .within(() => {
             cy.get(sel).within(() => {
@@ -23,8 +32,17 @@ Given('I click on the {ordinal}{clickable} near the text {string}', (n, type, te
 })
 
 Given('I select {string} from the {ordinal}dropdown near the text {string}', (option, n, text) => {
+    //Need to escape double quotes before inserting text into selector
+    text = text.replaceAll('\"', '\\\"')
     let subsel = `select:visible:nth(${n})`
-    let sel = `:contains(${text}):has(${subsel}):not(:has(:contains(${text}):has(${subsel})))`
+
+    //Match visible elements directly containing the text, call this "text container"
+    let text_container = `:contains(${text}):not(:has(:contains(${text}))):visible`
+    //Match elements containing both the text container, and at least `n` visible select elements
+    let sel = `:has(${text_container}):has(${subsel})`
+    //Filter out ancestors
+    sel = `${sel}:not(:has(${sel}))`
+
     cy.get_top_layer(($el) => {expect($el.find(sel)).length.to.be.above(0)})
         .within(() => {
             cy.get(sel).within(() => {
@@ -41,12 +59,22 @@ Given('I select {string} from the {ordinal}dropdown near the text {string}', (op
 // This is because it does not support pseudo-selectors in its argument
 // This would probably need to be solved by using some JQuery rather than only using selectors. Very low priority.
 Given('I enter {string} into the {ordinal}input field near the text {string}', (input, n, text) => {
+    //Need to escape double quotes before inserting text into selector
+    text = text.replaceAll('\"', '\\\"')
     let subsel = `:text:visible,textarea:visible`
-    let sel = `:contains(${text}):has(:text,textarea):not(:has(:contains(${text}):has(:text,textarea)))`
+
+    //Match visible elements directly containing the text, call this "text container"
+    let text_container = `:contains(${text}):not(:has(:contains(${text}))):visible`
+    //Match elements containing both the text container, and at least one visible text input or textarea elements
+    //Ideally this would only match for at least `n` text input / textarea elements, but there is no way to do this with a selector.
+    let sel = `:has(${text_container}):has(${subsel})`
+    //Filter out ancestors
+    sel = `${sel}:not(:has(${sel}))`
+
     cy.get_top_layer(($el) => {expect($el.find(sel)).length.to.be.above(0)})
         .within(() => {
             cy.get(sel).within(() => {
-                cy.get(`:text:visible,textarea:visible`).eq(n).clear().type(input)
+                cy.get(subsel).eq(n).clear().type(input)
             })
         })
 })
