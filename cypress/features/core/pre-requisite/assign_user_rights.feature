@@ -20,272 +20,272 @@ Feature: Assign User Rights
   #   but I've opted to skip it for now, until a determination that it is necessary is made. A similar
   #   type of assertion is skipped for expiration dates, where "never" is expected to appear in the table.
 
-  Scenario: Project Setup - 1
-    Given I am an "admin" user who logs into REDCap
-    And I create a project named "SecondProject_1115" with project purpose Practice / Just for fun via CDISC XML import from fixture location "cdisc_files/core/07_DesignForms_v1115.xml"
-    
+  # Scenario: Project Setup - 1
+  #   Given I am an "admin" user who logs into REDCap
+  #   And I create a project named "SecondProject_1115" with project purpose Practice / Just for fun via CDISC XML import from fixture location "cdisc_files/core/07_DesignForms_v1115.xml"
+  
   Scenario: Project Setup - 2
-    When I enable surveys
-    When I disable longitudinal mode
-    And I click on the button labeled "Additional customizations"
-    And I click on the checkbox near the text "Enable the Field Comment Log"
-    And I click on the button labeled "Save"
-    Then I should see "Success! Your changes have been saved."
-    # Manual script says there should be one record with one instrument that is a survey,
-    # but there are no instruments or records.
+  #   When I enable surveys
+  #   When I disable longitudinal mode
+  #   And I click on the button labeled "Additional customizations"
+  #   And I click on the checkbox near the text "Enable the Field Comment Log"
+  #   And I click on the button labeled "Save"
+  #   Then I should see "Success! Your changes have been saved."
+  #   # Manual script says there should be one record with one instrument that is a survey,
+  #   # but there are no instruments or records.
 
-  Scenario: 1 - Add test_user to SecondProject_1115
-    When I click on the link labeled "My Projects"
-    And I click on the link labeled "SecondProject_1115"
-    And I click on the link labeled "User Rights"
-    And I enter "test_user" into the input field near the text "Add with custom rights"
-    And I click on the button labeled "Add with custom rights"
-    Then I should see 'Adding new user "test_user"'
-    And I remove all Basic Rights within the open User Rights dialog box
-    # Script has expected result: "Data Entry rights remain".
-    # Consider adding an assertion here.
-    Then I save changes within the context of User Rights
+  # Scenario: 1 - Add test_user to SecondProject_1115
+  #   When I click on the link labeled "My Projects"
+  #   And I click on the link labeled "SecondProject_1115"
+  #   And I click on the link labeled "User Rights"
+  #   And I enter "test_user" into the input field near the text "Add with custom rights"
+  #   And I click on the button labeled "Add with custom rights"
+  #   Then I should see 'Adding new user "test_user"'
+  #   And I remove all Basic Rights within the open User Rights dialog box
+  #   # Script has expected result: "Data Entry rights remain".
+  #   # Consider adding an assertion here.
+  #   Then I save changes within the context of User Rights
     
-    When I click on the link labeled "My Projects"
-    Then I should see "Listed below are the REDCap projects"
+  #   When I click on the link labeled "My Projects"
+  #   Then I should see "Listed below are the REDCap projects"
 
-    Given I logout
-    Then I should see "Please log in"
+  #   Given I logout
+  #   Then I should see "Please log in"
     And I am a "standard" user who logs into REDCap
-    Then I should see "Logged in as"
+  #   Then I should see "Logged in as"
+  #   And I click on the link labeled "My Projects"
+  #   And I click on the link labeled "SecondProject_1115"
+  #   Then I should see a link labeled "Project Home"
+  #   And I should see a link labeled "Codebook"
+  #   And I should see a link labeled "Record Status Dashboard"
+  #   And I should see a link labeled "View / Edit Records"
+  #   And I should see "Applications"
+  #   Given I logout
+
+  # Scenario: 2 - Add expiration data for test_user
+  #   Given I am an "admin" user who logs into REDCap
     And I click on the link labeled "My Projects"
     And I click on the link labeled "SecondProject_1115"
-    Then I should see a link labeled "Project Home"
-    And I should see a link labeled "Codebook"
-    And I should see a link labeled "Record Status Dashboard"
-    And I should see a link labeled "View / Edit Records"
-    And I should see "Applications"
-    Given I logout
+    # And I click on the link labeled "User Rights"
+  #   And I assign an expired expiration date to user "Test User" with username of "test_user" on project ID 13
+  #   # ^ Current implementation of this step makes preceding steps redundant,
+  #   # but I've kept them in case this one changes, to maintain congruence with the manual script
 
-  Scenario: 2 - Add expiration data for test_user
-    Given I am an "admin" user who logs into REDCap
-    And I click on the link labeled "My Projects"
-    And I click on the link labeled "SecondProject_1115"
-    And I click on the link labeled "User Rights"
-    And I assign an expired expiration date to user "Test User" with username of "test_user" on project ID 13
-    # ^ Current implementation of this step makes preceding steps redundant,
-    # but I've kept them in case this one changes, to maintain congruence with the manual script
+  #   Given I logout
+  #   And I am a "standard" user who logs into REDCap
+  #   When I click on the link labeled "My Projects"
+  #   And I click on the link labeled "SecondProject_1115"
+  #   Then I should see "Your access to this particular REDCap project has expired."
+  #   Given I logout
 
-    Given I logout
-    And I am a "standard" user who logs into REDCap
-    When I click on the link labeled "My Projects"
-    And I click on the link labeled "SecondProject_1115"
-    Then I should see "Your access to this particular REDCap project has expired."
-    Given I logout
+  # Scenario: 3-4 - Assign Project Design and Setup & User Rights to test_user
+  #   Given I am an "admin" user who logs into REDCap
+  #   And I click on the link labeled "My Projects"
+  #   And I click on the link labeled "SecondProject_1115"
+  #   And I click on the link labeled "User Rights"
+  #   And I remove the expiration date to user "Test User" with username of "test_user" on project ID 13
+  #   # Then I should NOT see "10/31/2022"
+  #   # Manual script expected result (unasserted):
+  #   #   The Expiration column shows 'never' for test_user
 
-  Scenario: 3-4 - Assign Project Design and Setup & User Rights to test_user
-    Given I am an "admin" user who logs into REDCap
-    And I click on the link labeled "My Projects"
-    And I click on the link labeled "SecondProject_1115"
-    And I click on the link labeled "User Rights"
-    And I remove the expiration date to user "Test User" with username of "test_user" on project ID 13
-    # Then I should NOT see "10/31/2022"
-    # Manual script expected result (unasserted):
-    #   The Expiration column shows 'never' for test_user
+  #   When I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   Then I should see 'Editing existing user "test_user"'
+  #   When I check the User Right named "Project Setup & Design"
+  #   And I check the User Right named "User Rights"
+  #   And I save changes within the context of User Rights
+  #   # Manual script expected result (unasserted):
+  #   #   Verify in the main User Rights page, the User Rights contains a green check for user test_user.
 
-    When I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    Then I should see 'Editing existing user "test_user"'
-    When I check the User Right named "Project Setup & Design"
-    And I check the User Right named "User Rights"
-    And I save changes within the context of User Rights
-    # Manual script expected result (unasserted):
-    #   Verify in the main User Rights page, the User Rights contains a green check for user test_user.
+  # Scenario: 5 - Verify User Rights Links Visibility 
+  #   Given I logout
+  #   And I am a "standard" user who logs into REDCap
+  #   And I click on the link labeled "My Projects"
+  #   And I click on the link labeled "SecondProject_1115"
+  #   Then I should see a link labeled "Project Setup"
+  #   And I should see a link labeled "Designer"
+  #   And I should see a link labeled "Dictionary"
+  #   And I should see a link labeled "User Rights"
 
-  Scenario: 5 - Verify User Rights Links Visibility 
-    Given I logout
-    And I am a "standard" user who logs into REDCap
-    And I click on the link labeled "My Projects"
-    And I click on the link labeled "SecondProject_1115"
-    Then I should see a link labeled "Project Setup"
-    And I should see a link labeled "Designer"
-    And I should see a link labeled "Dictionary"
-    And I should see a link labeled "User Rights"
+  # Scenario: 6 - Assign Data Access Groups to test_user
+  #   Given I click on the link labeled "User Rights"
+  #   And I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   And I check the User Right named "Data Access Groups"
+  #   And I save changes within the context of User Rights
+  #   And I click on the link labeled "User Rights"
+  #   Then I should see a link labeled "DAGs"
 
-  Scenario: 6 - Assign Data Access Groups to test_user
-    Given I click on the link labeled "User Rights"
-    And I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    And I check the User Right named "Data Access Groups"
-    And I save changes within the context of User Rights
-    And I click on the link labeled "User Rights"
-    Then I should see a link labeled "DAGs"
+  # Scenario: 7 - Assign Data Exports - De-identified to test_user
+  #   Given I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   And I select the Data Exports priveleges option labeled "De-Identified*"
+  #   And I save changes within the context of User Rights
+  #   # Manual script expected result (unasserted):
+  #   #   Verify in the main User Rights page the ‘Data Export Tool’ box says De-identified for user test_user.
+  #   And I click on the link labeled "User Rights"
+  #   Then I should see a link labeled "Data Exports, Reports, and Stats"
 
-  Scenario: 7 - Assign Data Exports - De-identified to test_user
-    Given I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    And I select the Data Exports priveleges option labeled "De-Identified*"
-    And I save changes within the context of User Rights
-    # Manual script expected result (unasserted):
-    #   Verify in the main User Rights page the ‘Data Export Tool’ box says De-identified for user test_user.
-    And I click on the link labeled "User Rights"
-    Then I should see a link labeled "Data Exports, Reports, and Stats"
+  # Scenario: 8 - Assign Add/Edit/Organize Reports to test_user
+  #   Given I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   And I check the User Right named "Add/Edit/Organize Reports"
+  #   And I save changes within the context of User Rights
+  #   # Manual script expected result (unasserted):
+  #   #   Verify in the main User Rights page, Reports & Report Builder box contains a green check for user test_user.
+  #   #   - Verified by proxy of "Reports" link appearing, see next 2 steps
+  #   And I click on the link labeled "User Rights"
+  #   Then I should see a link labeled "Reports"
 
-  Scenario: 8 - Assign Add/Edit/Organize Reports to test_user
-    Given I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    And I check the User Right named "Add/Edit/Organize Reports"
-    And I save changes within the context of User Rights
-    # Manual script expected result (unasserted):
-    #   Verify in the main User Rights page, Reports & Report Builder box contains a green check for user test_user.
-    #   - Verified by proxy of "Reports" link appearing, see next 2 steps
-    And I click on the link labeled "User Rights"
-    Then I should see a link labeled "Reports"
+  # Scenario: 9 - Assign Survey Distribution Tools to test_user
+  #   Given I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   And I check the User Right named "Survey Distribution Tools"
+  #   And I save changes within the context of User Rights
+  #   # Manual script expected result (unasserted): similar to above
+  #   And I click on the link labeled "User Rights"
+  #   Then I should see a link labeled "Survey Distribution Tools"
 
-  Scenario: 9 - Assign Survey Distribution Tools to test_user
-    Given I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    And I check the User Right named "Survey Distribution Tools"
-    And I save changes within the context of User Rights
-    # Manual script expected result (unasserted): similar to above
-    And I click on the link labeled "User Rights"
-    Then I should see a link labeled "Survey Distribution Tools"
+  # Scenario: 10 - Assign Data Import Tool to test_user
+  #   Given I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   And I check the User Right named "Data Import Tool"
+  #   And I save changes within the context of User Rights
+  #   And I click on the link labeled "User Rights"
+  #   Then I should see a link labeled "Data Import Tool"
 
-  Scenario: 10 - Assign Data Import Tool to test_user
-    Given I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    And I check the User Right named "Data Import Tool"
-    And I save changes within the context of User Rights
-    And I click on the link labeled "User Rights"
-    Then I should see a link labeled "Data Import Tool"
+  # Scenario: 11 - Assign Data Comparison Tool to test_user
+  #   Given I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   And I check the User Right named "Data Comparison Tool"
+  #   And I save changes within the context of User Rights
+  #   And I click on the link labeled "User Rights"
+  #   Then I should see a link labeled "Data Comparison Tool"
 
-  Scenario: 11 - Assign Data Comparison Tool to test_user
-    Given I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    And I check the User Right named "Data Comparison Tool"
-    And I save changes within the context of User Rights
-    And I click on the link labeled "User Rights"
-    Then I should see a link labeled "Data Comparison Tool"
+  # Scenario: 12 - Remove Data Exports, Data Import, and Data Comparison User Rights 
+  #   Given I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   And I select the Data Exports priveleges option labeled "No Access"
+  #   And I uncheck the User Right named "Data Import Tool"
+  #   And I uncheck the User Right named "Data Comparison Tool"
+  #   And I check the User Right named "Logging"
+  #   And I save changes within the context of User Rights
+  #   And I click on the link labeled "User Rights"
 
-  Scenario: 12 - Remove Data Exports, Data Import, and Data Comparison User Rights 
-    Given I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    And I select the Data Exports priveleges option labeled "No Access"
-    And I uncheck the User Right named "Data Import Tool"
-    And I uncheck the User Right named "Data Comparison Tool"
-    And I check the User Right named "Logging"
-    And I save changes within the context of User Rights
-    And I click on the link labeled "User Rights"
+  #   Then I should NOT see a link labeled "Data Import Tool"
+  #   And I should NOT see a link labeled "Data Comparison Tool"
+  #   # Manual script has expected result "Data Export application is no longer available
+  #   # in the left sidebar", but the "Data Exports, Reports, and Stats" remains, which is normal.
+  #   # This can probably be chalked up to the script being outdated, and no action is needed
+  #   And I should see a link labeled "Logging"
+  #   When I click on the link labeled "Data Exports, Reports, and Stats"
+  #   Then I should NOT see "Other Export Options"
 
-    Then I should NOT see a link labeled "Data Import Tool"
-    And I should NOT see a link labeled "Data Comparison Tool"
-    # Manual script has expected result "Data Export application is no longer available
-    # in the left sidebar", but the "Data Exports, Reports, and Stats" remains, which is normal.
-    # This can probably be chalked up to the script being outdated, and no action is needed
-    And I should see a link labeled "Logging"
-    When I click on the link labeled "Data Exports, Reports, and Stats"
-    Then I should NOT see "Other Export Options"
-
-  Scenario: 13 - Assign Data Quality - create/edit rules to test_user
-    Given I click on the link labeled "User Rights"
-    And I click on the link labeled "test_user"  
-    And I click on the button labeled "Edit user privileges"
-    And I check the User Right named "Data Quality - Create & edit rules"
-    And I save changes within the context of User Rights
+  # Scenario: 13 - Assign Data Quality - create/edit rules to test_user
+  #   Given I click on the link labeled "User Rights"
+  #   And I click on the link labeled "test_user"  
+  #   And I click on the button labeled "Edit user privileges"
+  #   And I check the User Right named "Data Quality - Create & edit rules"
+  #   And I save changes within the context of User Rights
     
-    When I click on the link labeled "User Rights"
-    Then I should see a link labeled "Data Quality"
+  #   When I click on the link labeled "User Rights"
+  #   Then I should see a link labeled "Data Quality"
 
-  Scenario: 14 - Assign Data Quality - Execute rules to test_user
-    Given I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    And I check the User Right named "Data Quality - Execute rules"
-    And I save changes within the context of User Rights
+  # Scenario: 14 - Assign Data Quality - Execute rules to test_user
+  #   Given I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   And I check the User Right named "Data Quality - Execute rules"
+  #   And I save changes within the context of User Rights
 
-    When I click on the link labeled "Data Quality"
-    Then I should see "Execute rules"
+  #   When I click on the link labeled "Data Quality"
+  #   Then I should see "Execute rules"
 
-  Scenario: 15 - Assign Create Records to test_user
-    Given I click on the link labeled "User Rights"
-    And I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    And I check the User Right named "Create Records"
-    And I save changes within the context of User Rights
+  # Scenario: 15 - Assign Create Records to test_user
+  #   Given I click on the link labeled "User Rights"
+  #   And I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   And I check the User Right named "Create Records"
+  #   And I save changes within the context of User Rights
 
-    When I click on the link labeled "View / Edit Records"
-    Then I should see a button labeled "Add new record"
+  #   When I click on the link labeled "View / Edit Records"
+  #   Then I should see a button labeled "Add new record"
 
-  Scenario: 16 - Remove Create records
-    Given I click on the link labeled "User Rights"
-    And I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    And I uncheck the User Right named "Create Records"
-    And I save changes within the context of User Rights
+  # Scenario: 16 - Remove Create records
+  #   Given I click on the link labeled "User Rights"
+  #   And I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   And I uncheck the User Right named "Create Records"
+  #   And I save changes within the context of User Rights
 
-    When I click on the link labeled "Add / Edit Records"
-    Then I should NOT see a button labeled "Add new record"
+  #   When I click on the link labeled "Add / Edit Records"
+  #   Then I should NOT see a button labeled "Add new record"
 
-  Scenario: 17 - Assign Rename Records to test_user
-    Given I click on the link labeled "User Rights"
-    And I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    And I check the User Right named "Rename Records"
-    And I save changes within the context of User Rights
-    # Verify green check appears
+  # Scenario: 17 - Assign Rename Records to test_user
+  #   Given I click on the link labeled "User Rights"
+  #   And I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   And I check the User Right named "Rename Records"
+  #   And I save changes within the context of User Rights
+  #   # Verify green check appears
 
-  Scenario: 18 - Assign Delete Records to test_user
-    # Given I click on the link labeled "User Rights"
-    And I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    And I check the User Right named "Delete Records"
-    And I save changes within the context of User Rights
-    # Verify green check appears
+  # Scenario: 18 - Assign Delete Records to test_user
+  #   # Given I click on the link labeled "User Rights"
+  #   And I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   And I check the User Right named "Delete Records"
+  #   And I save changes within the context of User Rights
+  #   # Verify green check appears
 
-  Scenario: 19 - Assign Record Locking Customization to test_user
-    # Given I click on the link labeled "User Rights"
-    And I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    And I check the User Right named "Record Locking Customization"
-    And I save changes within the context of User Rights
+  # Scenario: 19 - Assign Record Locking Customization to test_user
+  #   # Given I click on the link labeled "User Rights"
+  #   And I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   And I check the User Right named "Record Locking Customization"
+  #   And I save changes within the context of User Rights
 
-    When I click on the link labeled "User Rights"
-    Then I should see a link labeled "Customize & Manage Locking/E-signatures"
-    # User Rights table should show a green check
+  #   When I click on the link labeled "User Rights"
+  #   Then I should see a link labeled "Customize & Manage Locking/E-signatures"
+  #   # User Rights table should show a green check
 
-  Scenario: 20 - Assign Lock/Unlock Records - Locking / Unlocking with E-signature authority to test_user
-    And I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    # Comment out below line if db seed reset is enabled
-    And I select the User Right named "Lock/Unlock Records" and choose "Disabled"
-    And I select the User Right named "Lock/Unlock Records" and choose "Locking / Unlocking with E-signature authority"
-    Then I should see "Please note that giving a user 'Locking / Unlocking with E-signature authority' privileges"
+  # Scenario: 20 - Assign Lock/Unlock Records - Locking / Unlocking with E-signature authority to test_user
+  #   And I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   # Comment out below line if db seed reset is enabled
+  #   And I select the User Right named "Lock/Unlock Records" and choose "Disabled"
+  #   And I select the User Right named "Lock/Unlock Records" and choose "Locking / Unlocking with E-signature authority"
+  #   Then I should see "Please note that giving a user 'Locking / Unlocking with E-signature authority' privileges"
     
-    When I click on the button labeled "Close"
-    And I save changes within the context of User Rights
-    # User Rights table should show green shield
+  #   When I click on the button labeled "Close"
+  #   And I save changes within the context of User Rights
+  #   # User Rights table should show green shield
 
-  Scenario: 21 - Assign Lock/Unlock Records - Locking / Unlocking to test_user
-    Given I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    And I select the User Right named "Lock/Unlock Records" and choose "Locking / Unlocking"
+  # Scenario: 21 - Assign Lock/Unlock Records - Locking / Unlocking to test_user
+  #   Given I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   And I select the User Right named "Lock/Unlock Records" and choose "Locking / Unlocking"
 
-    When I save changes within the context of User Rights
-    # User Rights table should show green check
+  #   When I save changes within the context of User Rights
+  #   # User Rights table should show green check
 
-  Scenario: 22 - Assign Lock/Unlock *Entire* Records (record level) to test_user
-    Given I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    And I check the User Right named "Lock/Unlock *Entire* Records"
+  # Scenario: 22 - Assign Lock/Unlock *Entire* Records (record level) to test_user
+  #   Given I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   And I check the User Right named "Lock/Unlock *Entire* Records"
     
-    When I save changes within the context of User Rights
-    # User Rights table should still show a green check for Record Locking Customization
+  #   When I save changes within the context of User Rights
+  #   # User Rights table should still show a green check for Record Locking Customization
 
-  Scenario: 23 - Assign Data Entry - No Access to test_user
-    Given I click on the link labeled "test_user"
-    And I click on the button labeled "Edit user privileges"
-    And I set Data Viewing Rights to No Access for the instrument "Text Validation"
-    And I set Data Viewing Rights to No Access for the instrument "Data Types"
-    And I save changes within the context of User Rights
+  # Scenario: 23 - Assign Data Entry - No Access to test_user
+  #   Given I click on the link labeled "test_user"
+  #   And I click on the button labeled "Edit user privileges"
+  #   And I set Data Viewing Rights to No Access for the instrument "Text Validation"
+  #   And I set Data Viewing Rights to No Access for the instrument "Data Types"
+  #   And I save changes within the context of User Rights
 
-    When I click on the link labeled "View / Edit Records"
-    And I select "1" from the dropdown near the text "Choose an existing Record ID"
-    Then I should NOT see "Text Validation"
-    And I should NOT see "Data Types"
+  #   When I click on the link labeled "View / Edit Records"
+  #   And I select "1" from the dropdown near the text "Choose an existing Record ID"
+  #   Then I should NOT see "Text Validation"
+  #   And I should NOT see "Data Types"
 
   Scenario: 24 - Assign Data Entry - Read Only to test_user
     Given I click on the link labeled "User Rights"
@@ -293,6 +293,24 @@ Feature: Assign User Rights
     And I click on the button labeled "Edit user privileges"
     And I set Data Viewing Rights to Read Only for the instrument "Text Validation"
     And I set Data Viewing Rights to Read Only for the instrument "Data Types"
+    And I save changes within the context of User Rights
+
+    When I click on the link labeled "View / Edit Records"
+    And I select "1" from the dropdown near the text "Choose an existing Record ID"
+    And I click on the link near the text "Text Validation"
+    Then I should NOT see a button labeled "Save & Exit Form"
+
+  Scenario: 25 - Assign Data Entry - View & Edit to test_user
+    Given I click on the link labeled "User Rights"
+    And I click on the link labeled "test_user"
+    And I click on the button labeled "Edit user privileges"
+    And I set Data Viewing Rights to View & Edit for the instrument "Text Validation"
+    And I set Data Viewing Rights to View & Edit for the instrument "Data Types"
+    And I save changes within the context of User Rights
+
+    When I click on the link labeled "View / Edit Records"
+    And I select "1" from the dropdown near the text "Choose an existing Record ID"
+    
 
 # Scenario: before step 26
 #     Given I logout
