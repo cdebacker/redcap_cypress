@@ -35,16 +35,12 @@ module.exports = (on, config) => {
 		var install_sql = sql_path + '/install.sql';
 		var data_sql = sql_path + '/install_data.sql';
 
-		if(advanced_user_info === "true"){
-			var user_sql = seeds_location + '/user_info/advanced.sql';
-		} else {
-			var user_sql=`${seeds_location}/user_info/standard.sql`
-		}
+		var user_sql = seeds_location + '/user_info/standard.sql'
+		if(advanced_user_info) { user_sql = seeds_location + '/user_info/advanced.sql'; }
 
 		var auth_sql = seeds_location + '/auth.sql';
 		var rights_sql = seeds_location + '/rights.sql';
 		var config_sql = seeds_location + '/config.sql';
-		var projects_sql = seeds_location + '/projects.sql';
 
 		//CREATE STRUCTURE FILE
 		var structure_and_data_file = test_seeds_location + '/structure_and_data.sql';
@@ -68,7 +64,6 @@ module.exports = (on, config) => {
 
 		shell.cat(rights_sql).toEnd(structure_and_data_file);
 
-		shell.cat(projects_sql).toEnd(structure_and_data_file);
 		shell.cat(config_sql).sed('REDCAP_VERSION_MAGIC_STRING', redcap_version).toEnd(structure_and_data_file);
 
 		shell.ShellString('\nCOMMIT;').toEnd(structure_and_data_file);
@@ -127,8 +122,31 @@ module.exports = (on, config) => {
 
 	parseCsv({csv_string}) {
 		return csv.parse(csv_string)
+	},
+
+	createInitialDbSeedLock(){
+	  const file = shell.cat("").to(shell.pwd() + '/test_db/initial_db_seed.lock')
+	  return fs.existsSync(file)
+	},
+
+	removeInitialDbSeedLock(){
+		const path = shell.pwd() + '/test_db/initial_db_seed.lock'
+
+		if (fs.existsSync(path)) {
+			shell.rm(path)
+
+			if (!fs.existsSync(path)) {
+				return true
+			}
+
+			return false
+		}
+	},
+
+	dbSeedLockExists(){
+		const file = shell.pwd() + '/test_db/initial_db_seed.lock'
+		return fs.existsSync(file)
 	}
 
   })
-
 }

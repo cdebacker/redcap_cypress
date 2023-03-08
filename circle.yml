@@ -4,7 +4,7 @@ jobs:
   build:
     machine:
       image: ubuntu-2004:202201-02
-    parallelism: 2
+    parallelism: 7
     steps:
       - checkout
       - run:
@@ -33,8 +33,9 @@ jobs:
           name: Configure Cypress environment
           command: |
             cd /home/circleci/project
-            sed s/PID/$PROJECT_ID/g cypress.json.example > cypress.json
+            sed s/PID/$PROJECT_ID/g cypress.config.js.example > cypress.config.js
             mv cypress.env.json.example cypress.env.json
+
       - run:
           name: Install Cypress
           command: |
@@ -45,7 +46,7 @@ jobs:
       - run:
           name: Run Tests
           command: |
-            npx cypress run --record --key $RECORD_KEY --parallel --group core-tests
+            npx cypress run --record --key $RECORD_KEY --parallel --group core-tests --browser chrome
 workflows:
   version: 2
   workflow:
