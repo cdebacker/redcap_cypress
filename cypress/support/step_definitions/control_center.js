@@ -1,4 +1,5 @@
-import {defineParameterType, Given} from "cypress-cucumber-preprocessor/steps";
+import {Given} from "cypress-cucumber-preprocessor/steps";
+require('./parameter_types.js')
 
 /**
  * @module ControlCenter
@@ -22,21 +23,16 @@ Given('I disable the Field Validation Type named {string} within the Control Cen
     cy.toggle_field_validation_type(field_validation_type, 'Disable')
 })
 
-defineParameterType({
-    name: 'toggle',
-    regexp: /enable|disable/
-})
-
 /**
  * @module ControlCenter
  * @author Adam De Fouw <aldefouw@medicine.wisc.edu>
  * @example I enable/disable the Administrator Privilege {string} for the administrator {string}
- * @param {string} action - enable / disable
+ * @param {toggleAction} action - enable / disable
  * @param {string} privilege - the label of the privilege you want for the user
  * @param {string} admin_user - the name of the user you are setting the privilege for
  * @description Enables the privilege for the administrator based upon user
  */
-Given('I {toggle} the Administrator Privilege {string} for the administrator {string}', (action, privilege, admin_user) => {
+Given('I {toggleAction} the Administrator Privilege {string} for the administrator {string}', (action, privilege, admin_user) => {
     cy.intercept({ method: 'POST', url: '*saveAdminPriv*'}).as('admin_privileges')
 
     cy.get('table#admin-rights-table').within(($table) => {

@@ -1,9 +1,4 @@
-import {defineParameterType, Given} from "cypress-cucumber-preprocessor/steps";
-
-defineParameterType({
-    name: 'see',
-    regexp: /should see|see/
-})
+import {Given} from "cypress-cucumber-preprocessor/steps";
 
 /**
  * @module Visibility
@@ -12,7 +7,7 @@ defineParameterType({
  * @param {string} text the text visually seen on screen
  * @description Visually verifies that text exists within the HTML object. NOTE: "should" is optional for readability.
  */
-Given("I {see} {string}", (see, text) => {
+Given("I (should) see {string}", (see, text) => {
     cy.get('html').should(($html) => { expect($html).to.contain(text) })
 })
 
@@ -105,10 +100,6 @@ Given("I should see a new dialog box named {string}", (text) => {
  * @param {string} check - valid choices are 'checked' OR 'unchecked'
  * @description Visually verifies that a specified checkbox is checked or uncheck
  */
-defineParameterType({
-    name: 'check',
-    regexp: /checked|unchecked/
-})
  Given("I should see the checkbox identified by {string}, {check}", (sel, check) => {
     //Really only added this to delay cypress cause sometimes it was moving forward without being checked
     //ATTN: Function no longer needed, can probably delete if no one needs it
@@ -173,11 +164,6 @@ Given("I should see {string} in an alert box", (text) => {
 
 })
 
-defineParameterType({
-    name: 'select',
-    regexp: /selected|unselected/
-})
-
 /**
  * @module Visibility
  * @author Adam De Fouw <aldefouw@medicine.wisc.edu>
@@ -199,11 +185,6 @@ Given("I should see the radio labeled {string} with option {string} {select}", (
  */
 Given("I should see a dialog containing the following text: {string}", (text) => {
     cy.verify_text_on_dialog(text)
-})
-
-defineParameterType({
-    name: 'LabeledElement',
-    regexp: /button|link/
 })
 
 /**

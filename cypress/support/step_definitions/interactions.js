@@ -1,5 +1,5 @@
 import { Given } from "cypress-cucumber-preprocessor/steps"
-import { defineParameterType } from "cypress-cucumber-preprocessor/steps"
+require('./parameter_types.js')
 
 /**
  * @module Interactions
@@ -21,11 +21,6 @@ Given("I click on the button labeled exactly {string}", (text) => {
  */
 Given("I click on the link labeled exactly {string}", (text) => {
     cy.get('a').contains(new RegExp("^" + text + "$", "g")).click()
-})
-
-defineParameterType({
-    name: 'instrument_save_options',
-    regexp: /Save & Stay|Save & Exit Record|Save & Go To Next Record|Save & Exit Form|Save & Go To Next Form|Save & Go To Next Instance/
 })
 
 /**
@@ -64,12 +59,21 @@ defineParameterType({
 /**
  * @module Interactions
  * @author Adam De Fouw <aldefouw@medicine.wisc.edu>
- * @example I click on the button labeled {string}
+ * @author Corey DeBacker <debacker@wisc.edu>
+ * @example I click on the ({ordinal}) button labeled {string}
+ * @param {ordinal} n - (optional) The ordinal specifying which matching button to click
+ *      Valid options are "first", "last", "second", "third", "fourth", "fifth", "sixth", "seventh", or "eighth".
  * @param {string} text - the text on the button element you want to click
- * @description Clicks on a button element with a specific text label.
+ * @description Clicks on a button element with a specific text label. If `n` is not specified, the first matching
+ *      button is clicked.
  */
-Given("I click on the button labeled {string}", (text) => {
-    cy.get('button').contains(text).click()
+// Similar issue as "I enter {string} into the {ordinal}input field near the text {string}", see comment. Low impact.
+Given("I click on the {ordinal}button labeled {string}", (n, text) => {
+    let sel = `:button:contains("${text}"):visible,:button[value*="${text}"]:visible` //for assertion
+    cy.get_top_layer(($el) => {expect($el.find(sel)).length.to.be.above(Math.max(n, 0))}) //assertion could be improved, ugly logs
+        .within(() => {
+            cy.get(sel).eq(n).invoke('removeAttr', 'target').click()
+        })
 })
 
 /**
@@ -199,11 +203,6 @@ Given("I save the field", () => {
     cy.save_field()
 })
 
-defineParameterType({
-    name: 'enter_type',
-    regexp: /enter|clear field and enter/
-})
-
 /**
  * @module Interactions
  * @author Adam De Fouw <aldefouw@medicine.wisc.edu>
@@ -329,19 +328,14 @@ Given("I select {string} from the dropdown identified by {string} labeled {strin
     })
 })
 
-defineParameterType({
-    name: 'element_type',
-    regexp: /element|checkbox/
-})
 /**
  * @module Interactions
  * @author Corey Debacker <debacker@wisc.edu>
- * @example I click on the < element | checkbox > identified by {string}
- * @param {string} element_type - valid choices are 'element' OR 'checkbox'
+ * @example I click on the element identified by {string}
  * @param {string} selector - the selector of the element to click on
  * @description Clicks on an element identified by specific selector
  */
-Given("I click on the {element_type} identified by {string}", (type, selector) => {
+Given("I click on the element identified by {string}", (selector) => {
     cy.get(selector).click()
 })
 
@@ -367,16 +361,6 @@ Given("I enter {string} into the field identified by {string}", (text, sel) => {
  */
 Given("I enter {string} into the hidden field identified by {string}", (text, sel) => {
     cy.get(sel).type(text, {force: true})
-})
-
-defineParameterType({
-    name: 'click_type',
-    regexp: /click on|check|uncheck/
-})
-
-defineParameterType({
-    name: 'checkbox_field_type',
-    regexp: /checkbox|checkbox in table/
 })
 
 /**
@@ -409,11 +393,6 @@ Given("I {click_type} the {checkbox_field_type} labeled {string}", (check, field
             }
         })
     })
-})
-
-defineParameterType({
-    name: 'elm_type',
-    regexp: /input|list item|checkbox|span/
 })
 
 /**
@@ -474,11 +453,6 @@ Given('I enter {string} into the field identified by {string} labeled {string}',
     })
 })
 
-
-defineParameterType({
-    name: 'confirmation',
-    regexp: /accept|cancel/
-})
 /**
  * @module Interactions
  * @author Adam De Fouw <aldefouw@medicine.wisc.edu>
@@ -761,12 +735,6 @@ Given('I select {string} from the Field Type dropdown of the open "Edit Field" d
  */
 Given('I select {string} from the Validation dropdown of the open "Edit Field" dialog box', (dropdown_option) => {
     cy.get('select#val_type').select(dropdown_option)
-})
-
-
-defineParameterType({
-    name: 'dropdown_type',
-    regexp: /field|table field/
 })
 
 /**

@@ -1,14 +1,5 @@
-import { defineParameterType, Given } from "cypress-cucumber-preprocessor/steps";
-
-defineParameterType({
-    name: 'toggleAction',
-    regexp: /enable|disable/
-})
-
-defineParameterType({
-    name: 'status',
-    regexp: /enabled|disabled/
-})
+import { Given } from "cypress-cucumber-preprocessor/steps";
+require('./parameter_types.js')
 
 /**
  * @module ProjectSetup
@@ -71,7 +62,7 @@ Given("I {toggleAction} surveys", (action) => {
  * @param {string} state the state of the button
  * @description Visually verifies whether Survey functionality is enabled or disabled in the project.
  */
-Given("I should see that surveys are {status}", (state) => {
+Given("I should see that surveys are {toggleStatus}", (state) => {
     let expected_text = ((state.toLowerCase() === 'enabled') ? 'Disable' : 'Enable');
     cy.get('#setupEnableSurveysBtn').should('contain.text', expected_text);
 })
@@ -83,14 +74,9 @@ Given("I should see that surveys are {status}", (state) => {
  * @param {string} state the state of the button
  * @description Visually verifies whether Longitudinal functionality is enabled or disabled in the project.
  */
-Given('I should see that longitudinal mode is "{status}"', (state) => {
+Given('I should see that longitudinal mode is "{toggleStatus}"', (state) => {
     let expected_text = ((state.toLowerCase() === 'enabled') ? 'Disable' : 'Enable');
     cy.get('#setupLongiBtn').should('contain.text', expected_text);
-})
-
-defineParameterType({
-    name: 'repeatability',
-    regexp: /enabled|disabled|modifiable/
 })
 
 /**
@@ -117,11 +103,6 @@ Given("I should see that repeatable instruments are {repeatability}", (state) =>
     cy.get('#enableRepeatingFormsEventsBtn').should('contain.text', expected_text);
 })
 
-defineParameterType({
-    name: 'repeatability_click',
-    regexp: /enable|disable|modify/
-})
-
 /**
  * @module ProjectSetup
  * @author Adam De Fouw <aldefouw@medicine.wisc.edu>
@@ -143,7 +124,7 @@ Given("I open the dialog box for the Repeatable Instruments and Events module", 
  * @param {string} state the state of the button
  * @description Visually verifies Auto Numbering functionality is enabled or disabled in the project.
  */
-Given('I should see that auto-numbering is "{status}"', (state) => {
+Given('I should see that auto-numbering is "{toggleStatus}"', (state) => {
     let expected_text = ((state.toLowerCase() === 'enabled') ? 'Disable' : 'Enable');
     cy.contains('Auto-numbering for records').within($div => {
         cy.get('button').should('contain.text', expected_text);
@@ -157,7 +138,7 @@ Given('I should see that auto-numbering is "{status}"', (state) => {
  * @param {string} state the state of the button
  * @description Visually verifies Scheduling functionality is enabled or disabled in the project.
  */
-Given('I should see that the scheduling module is "{status}"', (state) => {
+Given('I should see that the scheduling module is "{toggleStatus}"', (state) => {
     let expected_text = ((state.toLowerCase() === 'enabled') ? 'Disable' : 'Enable');
     cy.contains('Scheduling module').within($div => {
         cy.get('button').should('contain.text', expected_text);
@@ -171,7 +152,7 @@ Given('I should see that the scheduling module is "{status}"', (state) => {
  * @param {string} state the state of the button
  * @description Visually verifies Randomization functionality is enabled or disabled in the project.
  */
-Given('I should see that the randomization module is "{status}"', (state) => {
+Given('I should see that the randomization module is "{toggleStatus}"', (state) => {
     let expected_text = ((state.toLowerCase() === 'enabled') ? 'Disable' : 'Enable');
     cy.contains('Randomization module').within($div => {
         cy.get('button').should('contain.text', expected_text);
@@ -185,7 +166,7 @@ Given('I should see that the randomization module is "{status}"', (state) => {
  * @param {string} state the state of the button
  * @description Visually verifies that "Designate an Email" functionality is enabled or disabled in the project.
  */
-Given('I should see that the designate an email field for communications setting is "{status}"', (state) => {
+Given('I should see that the designate an email field for communications setting is "{toggleStatus}"', (state) => {
     let expected_text = ((state.toLowerCase() === 'enabled') ? 'Disable' : 'Enable');
     cy.contains('Designate an email field for communications').within($div => {
         cy.get('button').should('contain.text', expected_text);

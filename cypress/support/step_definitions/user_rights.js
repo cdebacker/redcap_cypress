@@ -1,4 +1,4 @@
-import {Given, defineParameterType} from "cypress-cucumber-preprocessor/steps";
+import {Given} from "cypress-cucumber-preprocessor/steps";
 import escapeStringRegexp from 'escape-string-regexp'
 
 /**
@@ -95,11 +95,6 @@ Given("I verify user rights are unavailable for {string} user type on the path {
  */
 Given("I change survey edit rights for {string} user on the form called {string} on project ID {int}", (user, instrument, pid) => {
     cy.change_survey_edit_rights(pid, user, instrument)
-})
-
-defineParameterType({
-    name: 'data_viewing_rights',
-    regexp: /No Access|Read Only|View & Edit/
 })
 
 /**
@@ -348,10 +343,6 @@ Given('I scroll the user rights page to the bottom', () => {
     cy.get('input[name="api_import"]').scrollIntoView()
 })
 
-defineParameterType({
-    name: 'user_right_action',
-    regexp: /add|remove/
-})
 
 /**
  * @module UserRights
