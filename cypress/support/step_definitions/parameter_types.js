@@ -57,7 +57,7 @@ defineParameterType({
 // user_rights.js
 defineParameterType({
     name: 'data_viewing_rights',
-    regexp: /No Access|Read Only|View & Edit/
+    regexp: /No Access|Read Only|View & Edit|Edit survey responses/
 })
 
 // interactions.js
