@@ -257,3 +257,25 @@ Given("I should NOT see a {LabeledElement} labeled {string}", (el, text) => {
     let sel = `${subsel}:contains("${text}"):visible` + (el == 'button' ? `,button[value="${text}"]:visible` : '')
     cy.get_top_layer(($e) => {console.log(sel);expect($e.find(sel)).to.have.lengthOf(0)})
 })
+
+/**
+ * @module Visibility
+ * @author Adam De Fouw <aldefouw@medicine.wisc.edu>
+ * @example I (should) see (a(n)) {string} within the {string} row of the column labeled {string}(table_name)
+ * @param {string} table_item - the item that you are searching for - includes "checkmark", "x", or any {string}
+ * @param {string} row_label - the label of the table row
+ * @param {string} column_label - the label of the table column
+ * @param {string} table_name - optional table item - " of the User Rights table"
+ * @description Identifies specific text or special item within a cell on a table based upon row and column labels
+ */
+Given("I (should )see (a )(an ){string} within the {string} row of the column labeled {string}{tableName}", (item, row_label, column_label, table) => {
+    const user_rights = { "checkmark" : `img[src$="/tick.png"]`, "x" : `img[src$="/cross.png"]`, "shield" : `img[src$="/tick_shield.png"]` }
+    
+    cy.table_cell_by_column_and_row_label(column_label, row_label).then(($td) => {
+        if(table === " of the User Rights table" && item.toLowerCase() in user_rights){
+            expect($td.find(user_rights[item.toLowerCase()]).length).to.be.eq(1)
+        } else {
+            expect($td).to.contain(item)
+        }
+    })
+})

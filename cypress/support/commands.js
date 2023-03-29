@@ -1157,6 +1157,46 @@ Cypress.Commands.add('ensure_csrf_token', () => {
     })
 })
 
+Cypress.Commands.add("table_cell_by_column_and_row_label", (column_label, row_label, table_selector= 'table', row_number = 0) => {
+    let column_num = 0
+    let table_cell = null
+    let selector = `${table_selector}:has(th:contains("${column_label}"):visible):visible`
+    let td_selector = `tr:has(td:visible):visible`
+
+    if(row_number === 0) {
+        selector = `${table_selector}:has(td:contains("${row_label}"):visible,th:contains("${column_label}"):visible):visible`
+        td_selector = `tr:has(td:contains("${row_label}"):visible):visible`
+    }
+
+    cy.get(selector).within(() => {
+        cy.get(`th:contains("${column_label}"):visible`).parent('tr').then(($tr) => {
+            $tr.find('th').each((thi, th) => {
+                if (Cypress.$(th).text().trim().includes(column_label)) column_num = thi
+            })
+        })
+    }).then(() => {
+
+        cy.get(selector).within(() => {
+            cy.get(td_selector).then(($td) => {
+                $td.each(($tri, $tr) => {
+                    cy.wrap($tr).each((tri, tr) => {
+                        tri.find('td').each((tdi, td) => {
+                            if (tdi === column_num && $tri === row_number){
+                                table_cell = td
+                            }
+                        })
+                    })
+                })
+            })
+        }).then(() => {
+            cy.wrap(table_cell)
+        })
+    })
+})
+
+// Cypress.Commands.add("table_cell_by_key_and_column_label", (key_col_label, val_col_label, key, table_selector= 'table') => {
+// })
+
 Cypress.Commands.overwrite(
     'click',
     (originalFn, subject, options) => {

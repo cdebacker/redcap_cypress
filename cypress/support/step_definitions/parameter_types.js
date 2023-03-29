@@ -133,6 +133,12 @@ defineParameterType({
     regexp: /selected|unselected/
 })
 
+// visibility.js
+defineParameterType({
+    name: 'tableName',
+    regexp: /| of the User Rights table/
+})
+
 // project_setup.js, control_center.js
 defineParameterType({
     name: 'toggleAction',
