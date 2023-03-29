@@ -131,7 +131,7 @@ Given("I click on the radio labeled {string} in the dialog box", (text) => {
  * @param {string} text - the text on the anchor element you want to click
  * @description Clicks on an anchor element with a specific text label.
  */
-Given("I click on the link labeled {string}", (text) => {
+Given("Adam I click on the link labeled {string}", (text) => {
     cy.get('a').contains(text).click()
 
     // cy.location().then((loc) => {
@@ -149,6 +149,21 @@ Given("I click on the link labeled {string}", (text) => {
     //     })
     //
     // })
+})
+
+/**
+ * @module Interactions
+ * @author Corey DeBacker <debacker@wisc.edu>
+ * @example I click on the ({ordinal}) link labeled {string}
+ * @param {ordinal} n - (optional) The ordinal specifying which matching button to click
+ *      Valid options are "first", "last", "second", "third", "fourth", "fifth", "sixth", "seventh", or "eighth".
+ * @param {string} text - the text on the anchor element you want to click
+ * @description Clicks on an anchor element with a specific text label.
+ */
+Given("I click on the {ordinal}link labeled {string}", (n, text) => {
+    let sel = `a:contains("${text}"):visible:nth(${n})`
+    cy.get_top_layer(($el) => {expect($el.find(sel)).length.to.be.above(max(0, n))})
+        .within(() => cy.get(sel).click())
 })
 
 /**
