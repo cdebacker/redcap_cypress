@@ -162,7 +162,7 @@ Given("Adam I click on the link labeled {string}", (text) => {
  */
 Given("I click on the {ordinal}link labeled {string}", (n, text) => {
     let sel = `a:contains("${text}"):visible:nth(${n})`
-    cy.get_top_layer(($el) => {expect($el.find(sel)).length.to.be.above(max(0, n))})
+    cy.get_top_layer(($el) => {expect($el.find(sel)).length.to.be.above(Math.max(0, n))})
         .within(() => cy.get(sel).click())
 })
 
