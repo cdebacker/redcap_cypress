@@ -305,7 +305,7 @@ Feature: Assign User Rights
     
     When I click on the button labeled "Close"
     And I save changes within the context of User Rights
-    Then I should see a "shield" within the "test_user" row of the column labeled "Record Locking Customization" of the User Rights table
+    Then I should see a "shield" within the "test_user" row of the column labeled "Lock/Unlock Records" of the User Rights table
 
   Scenario: 21 - Assign Lock/Unlock Records - Locking / Unlocking right to test_user
     Given I click on the link labeled "test_user"
@@ -313,7 +313,7 @@ Feature: Assign User Rights
     And I select the User Right named "Lock/Unlock Records" and choose "Locking / Unlocking"
 
     When I save changes within the context of User Rights
-    Then I should see a "check" within the "test_user" row of the column labeled "Lock/Unlock Records" of the User Rights table
+    Then I should see a "checkmark" within the "test_user" row of the column labeled "Lock/Unlock Records" of the User Rights table
 
 
   Scenario: 22 - Assign Lock/Unlock *Entire* Records (Record Level) right to test_user
