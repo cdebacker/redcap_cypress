@@ -11,7 +11,8 @@
 //
 // before(() => {
 //     //Do whatever you want before and after the basic initialization below
-//     rctf_initialize()
+//     // rctf_initialize()
+    
 // })
 // ==== END: ADDITIONAL CONTROL OPTION ===== //
 
